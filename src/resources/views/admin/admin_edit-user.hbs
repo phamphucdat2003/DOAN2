@@ -1,0 +1,105 @@
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+     .image-container {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .image-container:hover .overlay {
+        opacity: 1;
+    }
+
+    .preview-image {
+    max-width: 100%;
+    height: auto;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 mt-4">
+            <div class="login-container">
+                Chỉnh sửa User
+                <h2 class="text-center text-lavender font-weight-bold mb-4">ProjectConnect</h2>
+                <form method="post" action="/admin/{{user._id}}?_method=PUT">
+                    <div class="form-group">
+                        <label for="name">Họ và Tên</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{user.name}}" placeholder="Nhập Họ và Tên" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" placeholder="Nhập địa chỉ email" required>
+                    </div>
+                    <input type="password" class="d-none"value="{{user.password}}" name="password">
+                    <div class="form-group">
+                        <label for="password">Mật khẩu: <p class="text-danger d-inline">không bắt buộc</p></label>
+                        <input type="password" class="form-control" id="password" value="" name="passwordfake" placeholder="Nhập mật khẩu">
+                    </div>
+                    <input type="text" class="d-none"value="{{user.imgid}}" name="imgid">
+                    <div class="form-group">
+                        <select id="role" name="role" required class="form-control">
+                            <option value="admin">Admin</option>
+                            <option value="lecturer">Lecturer</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn background-lavender text-white btn-block">Cập nhật</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6 mt-5">
+            <div class="image-container">
+                <img src="../../img/register1.png" alt="bird abstract">
+                <div class="overlay overlayTrue">
+                <h3>{{user.name}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var overlay = document.querySelector('.overlayTrue');
+    overlay.style.opacity = '1';
+
+</script>

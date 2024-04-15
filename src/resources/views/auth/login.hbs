@@ -1,0 +1,56 @@
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .login-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 image-container">
+            <img src="../../img/login1.png" alt="Logo">
+        </div>
+        <div class="col-md-6 mt-5">
+            <div class="login-container">
+                Wellcome to
+                <h2 class="text-center text-lavender font-weight-bold mb-4">ProjectConnect</h2>
+                <form action="/auth/login" method="post">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Nhập địa chỉ email" required>
+                        <p class="text-danger">{{errorN}}</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" class="form-control"name="password" id="password" placeholder="Nhập mật khẩu" required>
+                        <p class="text-danger">{{errorP}}</p>
+                    </div>
+                    {{!-- <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="remember">
+                        <label class="form-check-label" for="remember">Ghi nhớ đăng nhập</label>
+                    </div> --}}
+                    <button type="submit" class="btn background-lavender text-white btn-block">Đăng nhập</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

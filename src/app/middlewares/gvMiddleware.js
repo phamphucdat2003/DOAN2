@@ -1,5 +1,5 @@
 const authMiddleware = (req, res, next) => {
-    if (req.session.admin) {
+    if (req.session.lecturer) {
         next()
     } else {
        res.redirect('back') 

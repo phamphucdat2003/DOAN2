@@ -1,0 +1,140 @@
+<style>
+#btn-create{
+    background-color: #FF4081;
+    border-color: #FF4081;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    display: block;
+    text-decoration: none;
+}
+.btn-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn:hover .btn-overlay {
+  opacity: 1;
+}
+  
+
+  /* Thiết lập ô con */
+  .profile {
+    display: flex; /* Hiển thị các phần tử con theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    padding: 20px; /* Khoảng cách bên trong ô con */
+    background-color: #ffffff; /* Nền màu trắng */
+    border: 2px solid black; /* Viền màu */
+    border-radius: 10px; /* Bo tròn các góc */
+    width: 90%; /* Chiếm 4/5 chiều dài của ô ngoài */
+  }
+
+  .profile img {
+    width: 100px; /* Đặt kích thước hình ảnh */
+    height: 100px; /* Đặt chiều cao hình ảnh */
+    object-fit: cover; /* Tự động điều chỉnh kích thước hình ảnh */
+    border-radius: 50%; /* Bo tròn hình ảnh */
+    margin-right: 20px; /* Khoảng cách bên phải của hình ảnh */
+  }
+
+  .profile-details {
+    text-align: left; /* Căn trái cho tên và email */
+  }
+
+  .profile-details h3,
+  .profile-details p {
+    margin: 0; /* Xóa khoảng cách giữa các phần tử */
+  }
+  .profile .form-wrapper {
+    margin-top: 10px; /* Khoảng cách giữa form và nút button */
+  }
+
+  .profile .form-wrapper form {
+    display: inline-block; /* Hiển thị form theo chiều ngang */
+  }
+
+  .profile .form-wrapper .btn {
+    margin-left: 10px; /* Khoảng cách giữa nút button trong form và ngoài form */
+  }
+</style>
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-md-6 offset-md-3">
+            <div class="custom-box">
+                <div class="mt-2 w-100"></div>
+                {{#each projects}}
+                    <div class="profile mb-2 mr-2 ml-2">
+                        <div class="d-flex">
+                            <div class="profile-details">
+                                <h3>{{this.name}}</h3>
+                                <p>{{this.description}}</p>
+                                <p>{{this.owner.name}}</p>
+                                <p>Level: {{this.level}}</p>
+                            </div>
+                        </div>
+                        <div class="form-wrapper ml-auto">
+                            <button data-id='{{this._id}}' class='btn btn-success'data-toggle='modal' data-target='#john-group-model'>Tham gia</button>
+                        </div>
+                    </div>
+                {{else}}
+                <div class="text-center">Chưa có Project.</div>
+                {{/each}}                
+            </div>
+        </div>
+    </div>
+</div>
+
+{{! //dialog xóa }}
+
+<div id='john-group-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>John Group</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>bạn có chắc sẽ tham gia đồ án này.</p>
+                <p>bạn không thể rời nhóm khi chưa hoàn thành đồ án.</p>
+                <p>cam kết nghe theo lời giảng viên.</p>
+                <p>......</p>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Suy nghĩ lại</button>
+                <button id='btn-john-group' type='button' class='btn btn-primary'>Tham gia</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{! delete hidden form }}
+
+<form name='john-group-from' method='post'></form>
+
+<script>
+    //
+    //{{!khi Trang chạy xong thì bắt đầu chạy func}}
+    document.addEventListener("DOMContentLoaded", function () {
+        var johngroupform = document.forms['john-group-from'];
+        var btnJohnGroup = document.getElementById('btn-john-group');
+        var projectId;
+        var restoreBtn = $('.btn-restore');
+        $('#john-group-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            projectId = button.data('id');
+        }) //
+       // {{!onclick vào buttun click thì xóa}}
+        btnJohnGroup.onclick = function () {
+            johngroupform.action = '/sv/' + projectId + '/john';
+            johngroupform.submit();
+        } 
+    })
+
+</script>

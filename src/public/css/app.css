@@ -1,2 +1,123 @@
+@charset "UTF-8";
 h1 {
   color: blue; }
+
+body {
+  background-color: #f3f6f9; }
+
+.text-lavender {
+  color: #6358dc; }
+
+.background-lavender {
+  background-color: #6358dc; }
+
+/* Thiết lập ô cha */
+.custom-box {
+  background-color: #f8f9fa;
+  /* Nền màu */
+  height: 410pt;
+  /* Chiều cao 2/3 màn hình */
+  overflow-y: scroll;
+  overflow: auto;
+  border-radius: 10px;
+  /* Bo tròn các góc */
+  background-color: #ffffff;
+  /* Nền màu trắng */
+  border: 2px solid black;
+  /* Viền màu */
+  align-items: center;
+  /* Căn giữa theo chiều dọc */
+  justify-content: center;
+  /* Căn giữa theo chiều ngang */
+  display: flex;
+  /* Hiển thị các phần tử con theo chiều ngang */
+  flex-wrap: wrap;
+  /* Cho phép các ô con xuống dòng khi không đủ không gian */ }
+
+.fixed1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999; }
+
+.fixed2 {
+  position: fixed;
+  top: 60pt;
+  left: 25%;
+  width: 100%;
+  z-index: 9999; }
+
+.navbar {
+  background-color: black; }
+
+.hight-130 {
+  height: 105pt; }
+
+.navbar-brand {
+  color: white;
+  display: flex;
+  align-items: center; }
+
+.navbar-brand img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px; }
+
+.navbar-nav .nav-link {
+  color: white;
+  margin-left: 15px; }
+
+.navbar-nav .nav-link img {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px; }
+
+.navbar-nav .nav-link span {
+  vertical-align: middle; }
+
+.avatar-dropdown {
+  position: relative; }
+
+.avatar-dropdown .dropdown-toggle::after {
+  display: none; }
+
+.avatar-dropdown .dropdown-menu {
+  right: 0;
+  left: auto;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  transform: translateX(calc(100% - 10rem)); }
+
+.avatar-dropdown .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: none;
+  transition: background-color 0.15s; }
+
+.avatar-dropdown .dropdown-item:hover,
+.avatar-dropdown .dropdown-item:focus {
+  color: #16181b;
+  background-color: #f8f9fa; }
+
+.avatar-dropdown .dropdown-divider {
+  margin: 0; }
+
+.custom-toolbar {
+  background-color: black;
+  height: 50px;
+  width: 50%;
+  /* Khoảng cách 2/3 màn hình */
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 30px;
+  /* Bo tròn các góc */ }

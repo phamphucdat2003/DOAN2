@@ -1,0 +1,35 @@
+<style>
+  .custom-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .custom-toolbar .hoverbtn {
+    flex: 1;
+    text-align: center;
+  }
+   .hoverbtn:hover { color: rgba(99, 88, 220, 1); cursor: pointer; } 
+</style>
+
+<div class="text-white custom-toolbar fixed2">
+  {{#if session.admin}}
+    <div class="hoverbtn" onclick="window.location.href='/admin/duyet'">DUYỆT</div>
+    <div class="hoverbtn" onclick="window.location.href='/admin/qltk'">QUẢN LÝ TÀI KHOẢN</div>
+  {{/if}}
+  {{#if session.lecturer}}
+    <div class="hoverbtn" onclick="window.location.href='/gv/doan'">ĐỒ ÁN</div>
+    <div class="hoverbtn" onclick="window.location.href='/gv/yeucau'">YÊU CẦU</div>
+    <div class="hoverbtn" onclick="window.location.href='/gv/sinhvien'">SINH VIÊN</div>
+    <div class="hoverbtn" onclick="window.location.href='/gv/nhom'">NHÓM</div>
+    <div class="hoverbtn" onclick="window.location.href='/gv/nhiemvu'">NHIỆM VỤ</div>
+    <div class="hoverbtn" onclick="window.location.href='/gv/nhantin'">NHẮN TIN</div>
+  {{/if}}
+  {{#if session.student}}
+    {{#unless session.group}}
+      <div class="hoverbtn" onclick="window.location.href='/sv/doan'">ĐỒ ÁN</div>
+    {{/unless}}
+    <div class="hoverbtn" onclick="window.location.href='/sv/yeucau'">YÊU CẦU</div>
+    <div class="hoverbtn" onclick="window.location.href='/sv/nhantin'">NHẮN TIN</div>
+  {{/if}}
+</div>
