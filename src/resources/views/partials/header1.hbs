@@ -3,7 +3,7 @@
  <nav class="fixed1 navbar navbar-expand-lg navbar-dark">
     <div class="container">
       <a class="navbar-brand" href="/">
-        <img src="../../img/logowhite.png" alt="Logo">
+        <img src="../../../img/logowhite.png" alt="Logo">
         <span>ProjectConnect</span>
       </a>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -15,8 +15,8 @@
               <img class="rounded-circle border border-white" src="https://drive.google.com/thumbnail?id={{session.imgid}}" alt="ảnh {{tsession.name}}">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Lựa chọn 1</a>
-              <a class="dropdown-item" href="#">Lựa chọn 2</a>
+              <a class="dropdown-item" href="/auth/modify">Profile</a>
+              <a class="dropdown-item" href="/auth/changepassword">Đổi mật khẩu</a>
               <div class="dropdown-divider"></div>
               <form action="/auth/logout" method='post'><button type='submit' class='dropdown-item'>logout</button></form>
             </div>
@@ -25,6 +25,5 @@
       </div>
     </div>
   </nav>
- <nav class="hight-130">
 </nav>
   

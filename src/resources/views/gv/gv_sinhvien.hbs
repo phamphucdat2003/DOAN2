@@ -1,0 +1,118 @@
+<style>
+        .container-fluid {
+            position: relative;
+        }
+        .custom-line {
+           width: 100%;
+            outline: 0;
+            border: none;
+            font-size: 15px;
+            height: 30px;
+            background-color: #A78BFA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color:white;
+        }
+        .profile {
+            display: flex; /* Hiển thị các phần tử con theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            padding: 20px; /* Khoảng cách bên trong ô con */
+            background-color: #ffffff; /* Nền màu trắng */
+            border: 2px solid black; /* Viền màu */
+            border-radius: 10px; /* Bo tròn các góc */
+            width: 90%; /* Chiếm 4/5 chiều dài của ô ngoài */
+        }
+
+        .profile img {
+            width: 100px; /* Đặt kích thước hình ảnh */
+            height: 100px; /* Đặt chiều cao hình ảnh */
+            object-fit: cover; /* Tự động điều chỉnh kích thước hình ảnh */
+            border-radius: 50%; /* Bo tròn hình ảnh */
+            margin-right: 20px; /* Khoảng cách bên phải của hình ảnh */
+        }
+
+        .profile-details {
+            width: 50%;
+            text-align: left; /* Căn trái cho tên và email */
+        }
+
+        .profile-details h3,
+        .profile-details p {
+            margin: 0; /* Xóa khoảng cách giữa các phần tử */
+        }
+        .wBtn{
+            width: 100%;
+        }
+        .wBtn-100{
+            width: 20%;
+        }
+        .d-flex{
+            width: 100%;
+        }
+</style>
+<div class="container-fluid h-100">
+    <div class="row h-100 justify-content-center">
+        <div class="col-md-6">
+            <div class="custom-box">
+                {{#each users}}
+                    <div class="profile mt-2 mr-2 ml-2">
+                        <div class="d-flex">
+                            <img src="https://drive.google.com/thumbnail?id={{this.imgid}}" alt="{{this.name}}">
+                            <div class="profile-details">
+                                <h5>{{this.name}}</h5>
+                                <p class="card-text">Proficiency:<br>{{this.proficiency}}</p>
+                            </div>
+                        </div>
+                        <div class="ml-auto wBtn-100">    
+                           <button data-studentid='{{this._id}}'
+                                        class='btn btn-danger wBtn mt-1' data-toggle='modal'
+                                        data-target='#kick-instructor-model'><i class="fa-solid fa-delete-left"></i></button>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="text-center">Bạn chưa nhận hướng dẩn sinh viên nào!</div>
+                {{/each}}                            
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='kick-instructor-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Đưa sinh viên ra khỏi nhóm này</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Hành động này không thể khôi phục, Bạn có chắc muốn đưa sinh viên này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-kick-instructor' type='button' class='btn btn-primary'>Chấp Nhận</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var btnKickInstructor = document.getElementById('btn-kick-instructor');
+        var studentId;
+        $('#kick-instructor-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            studentId = button.data('studentid');
+        })
+        btnKickInstructor.onclick = function () {
+            var kickFormInstructor = document.createElement('form');
+                kickFormInstructor.method = "POST";
+                kickFormInstructor.action = '/gv/' + studentId + '/kickinstructor?_method=PUT';
+                document.body.appendChild(kickFormInstructor);
+                kickFormInstructor.submit();
+        } 
+    })
+</script>

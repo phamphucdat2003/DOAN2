@@ -18,10 +18,11 @@
  </style>
 <div class="container costom_create-doan mt-2">
         <h2 class="mb-4">Chỉnh sửa Project</h2>
-        <form method="post" action="/gv/{{project._id}}?_method=PUT">
+        <form method="post" action="/gv/{{project._id}}/edit-project?_method=PUT">
             <div class="form-group">
                 <label for="name">Project Name:</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{project.name}}" placeholder="Enter project name" required>
+                <p class="text-danger">{{errorName}}</p>
             </div>
             <div class="form-group">
                 <label for="description">Project Description:</label>

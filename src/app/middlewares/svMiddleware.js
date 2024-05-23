@@ -1,9 +1,10 @@
-const authMiddleware = (req, res, next) => {
+
+const svMiddleware = (req, res, next) => {
     if (req.session.student) {
         next()
     } else {
-       res.redirect('back') 
+       res.redirect('/') 
     }
 }
 
-module.exports = authMiddleware;
+module.exports = svMiddleware;

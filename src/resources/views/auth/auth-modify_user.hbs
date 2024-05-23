@@ -1,0 +1,120 @@
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-container img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+     .image-container {
+        position: relative;
+        width: 400px;
+        height: 400px;
+        overflow: hidden;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .image-container:hover .overlay {
+        opacity: 1;
+    }
+
+    .preview-image {
+    max-width: 100%;
+    height: auto;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row mt-5 justify-content-center align-items-center">
+        <div class="col-md-6 mt-4">
+            <div class="login-container">
+                <h3 class="text-center text-lavender font-weight-bold mb-4">THÔNG TIN CÁ NHÂN</h3>
+                <form method="post" action="/auth/modify?_method=PUT" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="name">Họ và Tên</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{user.name}}" placeholder="Nhập Họ và Tên" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" placeholder="Nhập địa chỉ email" required>
+                    </div>
+                    {{#if session.student}}
+                        <div class="form-group">
+                            <select name="classuser" class="form-control">
+                                <option value="" >Chọn lớp</option>
+                                <option value="Công Nghệ Thông Tin">Công Nghệ Thông Tin</option>
+                                <option value="Khoa Học Dữ liệu">Khoa Học Dữ liệu</option>
+                                <option value="Khoa Học Máy Tính">Khoa Học Máy Tính</option>
+                                <option value="Kỹ Thuật Phần Mềm">Kỹ Thuật Phần Mềm</option>
+                                <option value="Hệ Thống Thông Tin">Hệ Thống Thông Tin</option>
+                            </select>
+                            {{#if nameclass}}
+                                <p class="mt-1">lớp hiện tại: {{nameclass}}</p>
+                            {{/if}}
+                        </div>
+                    {{/if}}
+                    <div class="form-group">
+                        <label for="proficiency">Proficiency:</label>
+                        <textarea class="form-control" id="proficiency" name="proficiency" placeholder="Enter proficiency" rows="3" required>{{user.proficiency}}</textarea>
+                    </div>
+                    <input type="text" class="d-none"value="{{user.imgid}}" name="imgid">
+                     <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="imgfile" name="imgfile" >
+                            <label class="custom-file-label" for="imgfile">Chọn ảnh</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn background-lavender text-white btn-block">Cập nhật</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6 mt-5">
+            <div class="image-container">
+                <img id="imgId" src="https://drive.google.com/thumbnail?id={{user.imgid}}" alt="ảnh {{user.name}}">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('imgfile').addEventListener('change', function(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function() {
+            var img = document.getElementById('imgId');
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    })
+</script>

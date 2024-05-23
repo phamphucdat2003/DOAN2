@@ -5,31 +5,42 @@
     align-items: center;
   }
   
-  .custom-toolbar .hoverbtn {
+  .custom-toolbar .btn {
     flex: 1;
     text-align: center;
   }
    .hoverbtn:hover { color: rgba(99, 88, 220, 1); cursor: pointer; } 
 </style>
-
-<div class="text-white custom-toolbar fixed2">
-  {{#if session.admin}}
-    <div class="hoverbtn" onclick="window.location.href='/admin/duyet'">DUYỆT</div>
-    <div class="hoverbtn" onclick="window.location.href='/admin/qltk'">QUẢN LÝ TÀI KHOẢN</div>
-  {{/if}}
-  {{#if session.lecturer}}
-    <div class="hoverbtn" onclick="window.location.href='/gv/doan'">ĐỒ ÁN</div>
-    <div class="hoverbtn" onclick="window.location.href='/gv/yeucau'">YÊU CẦU</div>
-    <div class="hoverbtn" onclick="window.location.href='/gv/sinhvien'">SINH VIÊN</div>
-    <div class="hoverbtn" onclick="window.location.href='/gv/nhom'">NHÓM</div>
-    <div class="hoverbtn" onclick="window.location.href='/gv/nhiemvu'">NHIỆM VỤ</div>
-    <div class="hoverbtn" onclick="window.location.href='/gv/nhantin'">NHẮN TIN</div>
-  {{/if}}
-  {{#if session.student}}
-    {{#unless session.group}}
-      <div class="hoverbtn" onclick="window.location.href='/sv/doan'">ĐỒ ÁN</div>
-    {{/unless}}
-    <div class="hoverbtn" onclick="window.location.href='/sv/yeucau'">YÊU CẦU</div>
-    <div class="hoverbtn" onclick="window.location.href='/sv/nhantin'">NHẮN TIN</div>
-  {{/if}}
-</div>
+{{#unless hideHeader}}
+  <nav class="hight-130"></nav>
+  <div class="text-white custom-toolbar fixed2">
+    {{#if session.admin}}
+      <div class="hoverbtn btn" onclick="window.location.href='/admin/duyet'">DUYỆT</div>
+      <div class="hoverbtn btn" onclick="window.location.href='/admin/qltk'">QUẢN LÝ TÀI KHOẢN</div>
+    {{/if}}
+    {{#if session.lecturer}}
+      <div class="hoverbtn btn" onclick="window.location.href='/gv/doan'">ĐỒ ÁN</div>
+      <div class="hoverbtn btn" onclick="window.location.href='/gv/yeucau'">YÊU CẦU</div>
+      <div class="hoverbtn btn" onclick="window.location.href='/gv/sinhvien'">SINH VIÊN</div>
+      <div class="hoverbtn btn" onclick="window.location.href='/gv/nhom'">NHÓM</div>
+      <div class="hoverbtn btn" onclick="window.location.href='/gv/nhiemvu'">NHIỆM VỤ</div>
+      <div class="hoverbtn btn" onclick="window.location.href='/message/nhantin'">NHẮN TIN</div>
+    {{/if}}
+    {{#if session.student}}
+      {{#unless hide}}
+        {{#unless session.group}}
+            {{#unless session.instructor}}
+              <div class="hoverbtn btn" onclick="window.location.href='/sv/giangvien'">GIẢNG VIÊN</div>
+            {{else}}
+              <div class="hoverbtn btn" onclick="window.location.href='/sv/doan'">ĐỒ ÁN</div>
+            {{/unless}}
+        {{else}}
+            <div class="hoverbtn btn" onclick="window.location.href='/sv/nhiemvu'">NHIỆM VỤ</div>
+            <div class="hoverbtn btn" onclick="window.location.href='/message/nhantin'">NHẮN TIN</div>
+        {{/unless}}
+      {{else}}
+            {{!-- <div class="hoverbtn btn" onclick="window.location.href='/news'">TIN TỨC</div> --}}
+      {{/unless}}
+    {{/if}}
+  </div>
+{{/unless}}

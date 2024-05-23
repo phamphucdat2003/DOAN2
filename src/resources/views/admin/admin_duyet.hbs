@@ -49,8 +49,8 @@
 </style>
 
 <div class="container-fluid h-100">
-  <div class="row h-100">
-    <div class="col-md-6 offset-md-3">
+  <div class="row h-100 justify-content-center">
+    <div class="col-md-6">
       <div class="custom-box">
         {{#each userfakes}}
           <div class="profile mt-2 mr-2 ml-2">
@@ -62,21 +62,15 @@
               </div>
             </div>
             <div class="form-wrapper ml-auto">
-              <form action="/admin/registerTrue" method="post" class="d-inline">
-                <input class="d-none" type="email" id="email" name="email" value="{{this.email}}" required>
-                <input class="d-none" type="text" id="name" name="name" value="{{this.name}}" required>
-                <input class="d-none" type="password" id="password" name="password" value="{{this.password}}" required>
-                <input class="d-none" type="text" id="imgid" name="imgid" value="{{this.imgid}}" required>
                 <div class="form-group">
-                  <select id="role" name="role" required class="form-control">
+                  <select id="role-{{this._id}}" class="form-control">
                     <option value="admin">Admin</option>
                     <option value="lecturer">Lecturer</option>
                     <option value="student">Student</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Duyệt</button> 
-              </form>
-              <button data-id='{{this.imgid}}' class='btn btn-primary' href='' data-toggle='modal' data-target='#delete-user-model'>Từ chối</button>
+              <button data-id='{{this.imgid}}' class='btn btn-danger' href='' data-toggle='modal' data-target='#delete-user-model'>Từ chối</button>
+              <button onclick="verify('{{this._id}}')" type='button' class='btn btn-primary'>Duyệt</button> 
             </div>
           </div>
         {{else}}
@@ -88,8 +82,6 @@
   </div>
 </div>
 
-
-{{! //dialog xóa }}
 
 <div id='delete-user-model' class='modal' tabindex='-1' role='dialog'>
     <div class='modal-dialog modal-dialog-centered' role='document'>
@@ -110,29 +102,30 @@
         </div>
     </div>
 </div>
-{{! delete hidden form }}
-
-<form name='delete-user-form' method='post'></form>
-
-
 
 <script>
-    //
-    //{{!khi Trang chạy xong thì bắt đầu chạy func}}
-    document.addEventListener("DOMContentLoaded", function () {
-        var deleteform = document.forms['delete-user-form'];
-        var btnDeleteUser = document.getElementById('btn-delete-user');
-        var fileId;
-        var restoreBtn = $('.btn-restore');
-        $('#delete-user-model').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            fileId = button.data('id');
-        }) //
-       // {{!onclick vào buttun click thì xóa}}
-        btnDeleteUser.onclick = function () {
-            deleteform.action = '/admin/f/' + fileId + '/forcedelete?_method=DELETE';
-            deleteform.submit();
-        } 
-    })
+  document.addEventListener("DOMContentLoaded", function () {
+    var deleteform = document.createElement('form');
+    var btnDeleteUser = document.getElementById('btn-delete-user');
+    var fileId;
+    $('#delete-user-model').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      fileId = button.data('id');
+    });
+    btnDeleteUser.onclick = function () {
+      deleteform.method = 'POST';
+      deleteform.action = '/admin/' + fileId + '/forcedelete?_method=DELETE';
+      document.body.appendChild(deleteform);
+      deleteform.submit();
+    };
+  });
+  function verify(id){
+    var Verifiedform = document.createElement('form');
+    var role = document.getElementById("role-"+id);
+    Verifiedform.method = 'POST';
+    Verifiedform.action = '/admin/' + id + '/' + role.value + '/verified?_method=PUT';
+    document.body.appendChild(Verifiedform);
+    Verifiedform.submit();
+  }
 
 </script>

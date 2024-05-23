@@ -1,11 +1,9 @@
-const Group = require('../models/Group');
 
 async function sv_groupMiddleware(req, res, next) {
-
-    if (req.session.group) {
-        res.redirect('sv/yeucau');
-    } else {
+    if ((req.session.isVerifiedbyInstructor == 1) && !req.session.group) {
         next();
+    } else {
+        res.redirect('/');
     }
 }
 

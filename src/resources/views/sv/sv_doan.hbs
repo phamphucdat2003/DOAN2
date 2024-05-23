@@ -64,8 +64,8 @@
   }
 </style>
 <div class="container-fluid h-100">
-    <div class="row h-100">
-        <div class="col-md-6 offset-md-3">
+    <div class="row h-100 justify-content-center">
+        <div class="col-md-6">
             <div class="custom-box">
                 <div class="mt-2 w-100"></div>
                 {{#each projects}}
@@ -83,14 +83,13 @@
                         </div>
                     </div>
                 {{else}}
-                <div class="text-center">Chưa có Project.</div>
+                <div class="text-center">Chưa có Project phù hợp với bạn.</div>
                 {{/each}}                
             </div>
         </div>
     </div>
 </div>
 
-{{! //dialog xóa }}
 
 <div id='john-group-model' class='modal' tabindex='-1' role='dialog'>
     <div class='modal-dialog modal-dialog-centered' role='document'>
@@ -132,7 +131,7 @@
         }) //
        // {{!onclick vào buttun click thì xóa}}
         btnJohnGroup.onclick = function () {
-            johngroupform.action = '/sv/' + projectId + '/john';
+            johngroupform.action = '/sv/' + projectId + '/johngroup';
             johngroupform.submit();
         } 
     })

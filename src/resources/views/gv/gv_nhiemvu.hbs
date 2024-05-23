@@ -1,0 +1,161 @@
+<style>
+        .container-fluid {
+            position: relative;
+        }
+        .custom-line {
+           width: 100%;
+            outline: 0;
+            border: none;
+            font-size: 15px;
+            height: 30px;
+            background-color: #A78BFA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color:white;
+        }
+        .profile {
+            display: flex; /* Hiển thị các phần tử con theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            padding: 20px; /* Khoảng cách bên trong ô con */
+            background-color: #ffffff; /* Nền màu trắng */
+            border: 2px solid black; /* Viền màu */
+            border-radius: 10px; /* Bo tròn các góc */
+            width: 90%; /* Chiếm 4/5 chiều dài của ô ngoài */
+        }
+        .profile-details {
+            width: 80%;
+            text-align: left; /* Căn trái cho tên và email */
+        }
+
+        .profile-details h3,
+        .profile-details p {
+            margin: 0; /* Xóa khoảng cách giữa các phần tử */
+        }
+        .wBtn{
+            width: 100%;
+        }
+        .wBtn-100{
+            width: 20%;
+        }
+        .d-flex{
+            width: 100%;
+        }
+        #btn-navigation{
+        background-color: #FF4081;
+        border-color: #FF4081;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        overflow: hidden;
+        display: block;
+        text-decoration: none;
+    }
+</style>
+<div class="container-fluid h-100">
+    <div class="row h-100 justify-content-center">
+        <div class="col-md-6">
+            <div class="custom-box">
+                <a href="/gv/history_nhiemvu" id="btn-navigation" class="btn btn-lg btn-block rounded-pill text-white">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                </a>
+                {{#each tasks}}
+                    <div class="profile mt-2 mr-2 ml-2">
+                        <div class="d-flex">
+                            <div class="profile-details">
+                                <h3>{{this.title}}</h3>
+                                <p>{{this.description}}</p>
+                                <div class="d-flex">SVTH: {{this.assignedTo.name}} </div>
+                                <div class="d-flex">Date: {{{formatdaytimetask this.datacomplete}}} </div>
+                            </div>
+                        </div>
+                        <div class="ml-auto wBtn-100">
+                            {{#if this.iscomplete}}    
+                                <button data-taskid='{{this._id}}'
+                                                class='btn btn-primary wBtn mt-1' data-toggle='modal'
+                                                data-target='#verify-task-model'><i class="fa-solid fa-check"></i></button>
+                            {{/if}}
+                            <button data-taskid='{{this._id}}' class='btn btn-danger wBtn mt-1' data-toggle='modal' data-target='#delete-task-model'>
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="text-center">Bạn chưa nhận hướng dẩn sinh viên nào!</div>
+                {{/each}}                            
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='verify-task-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Sinh viên đã hoàn thành nhiệm vụ này</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>bạn có chắt sinh viên đã hoàn thành nhiệm vụ này,hãy xem xét kỹ trước khi xác nhận?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-verify-task' type='button' class='btn btn-primary'>Xác Nhận</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='delete-task-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Xóa nhiệm vụ này</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>hành vi này không thể khôi phục,bạn có chắc về quyết định này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-delete-task' type='button' class='btn btn-primary'>Xác Nhận</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var btnVerifyTask = document.getElementById('btn-verify-task');
+        var btnDeleteTask = document.getElementById('btn-delete-task');
+        var taskId;
+        $('#verify-task-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            taskId = button.data('taskid');
+        })
+        $('#delete-task-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            taskId = button.data('taskid');
+        })
+        btnVerifyTask.onclick = function () {
+            var verifyform = document.createElement('form');
+                verifyform.method = "POST";
+                verifyform.action = '/gv/' + taskId + '/verifytask?_method=PUT';
+                document.body.appendChild(verifyform);
+                verifyform.submit();
+        } 
+        btnDeleteTask.onclick = function () {
+            var deleteform = document.createElement('form');
+                deleteform.method = "POST";
+                deleteform.action = '/gv/' + taskId + '/deletetask?_method=PUT';
+                document.body.appendChild(deleteform);
+                deleteform.submit();
+        } 
+    })
+</script>

@@ -2,29 +2,60 @@
 h1 {
     color: $color_blue;
 }
-body{
-    background-color:rgba(243, 246, 249, 1);
-}
+
 .text-lavender{
     color:rgba(99, 88, 220, 1);
 }
 .background-lavender{
     background-color:rgba(99, 88, 220, 1);
 }
-
+.btn-primary{
+  background-color:#2cc8f7;
+}
+.btn-danger{
+  background-color:#ee243c;
+}
+.btn-success{
+  background-color:#82ce34;;
+}
+.mysuccess{
+  color:#0de589;
+}
+.success{
+  background: #82ce34;
+}
+.success-faint{
+  background: #7ee787;
+}
+.danger{
+  background: #ee243c;
+}
+.primary{
+  background:#2cc8f7;
+}
+.warning{
+  background:#FCD34D;
+}
+.secondary{
+  background-color:#D1D5DB;
+}
+.text-secondary{
+  color: #D1D5DB;
+}
 /* Thiết lập ô cha */
 .custom-box {
-  background-color: #f8f9fa; /* Nền màu */
-  height: 410pt;; /* Chiều cao 2/3 màn hình */
-  overflow-y: scroll;
+  height: 410pt; /* Chiều cao 2/3 màn hình */
   overflow: auto; 
   border-radius: 10px; /* Bo tròn các góc */
   background-color: #ffffff; /* Nền màu trắng */
-  border: 2px solid black; /* Viền màu */
-  align-items: center; /* Căn giữa theo chiều dọc */
-  justify-content: center; /* Căn giữa theo chiều ngang */
+  border: 3px solid black; /* Viền màu */
+  align-items: flex-start;
+  justify-content:center ; /* Căn giữa theo chiều ngang */
   display: flex; /* Hiển thị các phần tử con theo chiều ngang */
   flex-wrap: wrap; /* Cho phép các ô con xuống dòng khi không đủ không gian */
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .fixed1{
@@ -32,14 +63,14 @@ body{
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 100;
 }
 .fixed2{
     position: fixed;
     top: 60pt;
     left: 25%;
     width: 100%;
-    z-index: 9999;
+    z-index: 100;
 }
 .navbar {
     background-color: black;

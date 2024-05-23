@@ -12,6 +12,10 @@ const groupSchema = new Schema(
             ref: 'Project',
             required: true,       
         },
+        imglink: {
+            type: String,
+            default:"https://th.bing.com/th/id/OIP.DEZfPfqxguvbExIzlmi5OwAAAA?w=474&h=417&rs=1&pid=ImgDetMain"
+        }
     },
     {
         timestamps: true,

@@ -1,0 +1,309 @@
+<style>
+        .container-fluid {
+            position: relative;
+        }
+        .custom-line {
+           width: 100%;
+            outline: 0;
+            border: none;
+            font-size: 15px;
+            height: 30px;
+            background-color: #A78BFA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color:white;
+        }
+        .profile {
+            display: flex; /* Hiển thị các phần tử con theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            padding: 20px; /* Khoảng cách bên trong ô con */
+            background-color: #ffffff; /* Nền màu trắng */
+            border: 2px solid black; /* Viền màu */
+            border-radius: 10px; /* Bo tròn các góc */
+            width: 90%; /* Chiếm 4/5 chiều dài của ô ngoài */
+        }
+
+        .profile img {
+            width: 100px; /* Đặt kích thước hình ảnh */
+            height: 100px; /* Đặt chiều cao hình ảnh */
+            object-fit: cover; /* Tự động điều chỉnh kích thước hình ảnh */
+            border-radius: 50%; /* Bo tròn hình ảnh */
+            margin-right: 20px; /* Khoảng cách bên phải của hình ảnh */
+        }
+
+        .profile-details {
+            width: 50%;
+            text-align: left; /* Căn trái cho tên và email */
+        }
+
+        .profile-details h3,
+        .profile-details p {
+            margin: 0; /* Xóa khoảng cách giữa các phần tử */
+        }
+        .wBtn{
+            width: 100%;
+        }
+        .wBtn-100{
+            width: 20%;
+        }
+        .d-flex{
+            width: 100%;
+        }
+
+.modal-confirm {		
+	color: #636363;
+	width: 325px;
+	font-size: 14px;
+}
+.modal-confirm .modal-content {
+	padding: 20px;
+	border-radius: 5px;
+	border: none;
+}
+.modal-confirm .modal-header {
+	border-bottom: none;   
+	position: relative;
+}
+.modal-confirm h4 {
+	text-align: center;
+	font-size: 26px;
+	margin: 30px 0 -15px;
+}
+.modal-confirm .form-control, .modal-confirm .btn {
+	min-height: 40px;
+	border-radius: 3px; 
+}
+.modal-confirm .close {
+	position: absolute;
+	top: -5px;
+	right: -5px;
+}	
+.modal-confirm .modal-footer {
+	border: none;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 13px;
+}	
+.modal-confirm .icon-box {
+	color: #fff;		
+	position: absolute;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+	top: -70px;
+	width: 95px;
+	height: 95px;
+	border-radius: 50%;
+	z-index: 9;
+	padding: 15px;
+	text-align: center;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+}
+.modal-confirm .icon-box i {
+	font-size: 58px;
+	position: relative;
+	top: 3px;
+}
+.modal-confirm.modal-dialog {
+	margin-top: 80px;
+}
+.trigger-btn {
+	display: inline-block;
+	margin: 100px auto;
+}
+</style>
+<div class="container-fluid h-100">
+    <div class="row h-100 justify-content-center">
+        <div class="col-md-6">
+            <div class="custom-box">
+                {{#each groups}}
+                    <div class="custom-line">{{this.project.name}}</div>
+                    {{#unless (arranti2 this.members)}}
+                        {{#each this.members}}
+                            {{#if (eq this.isVerifiedbyInstructor 2)}}
+                                <div class="profile mt-2 mr-2 ml-2 mb-2">
+                                    <div class="d-flex">
+                                        <img src="https://drive.google.com/thumbnail?id={{this.imgid}}" alt="Hình ảnh từ Google Drive">
+                                        <div class="profile-details">
+                                            <h5>{{this.name}}</h5>
+                                            <p class="card-text">Proficiency:<br>{{this.proficiency}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto wBtn-100">  
+
+                                        <button data-studentid='{{this._id}}'
+                                        class='btn btn-primary wBtn' data-toggle='modal'
+                                        data-target='#task-user-model'><i class="fa-regular fa-clipboard"></i></button>
+
+                                        <button class='btn btn-primary wBtn mt-1'><i class="fa-regular fa-comment"></i></button>
+                                        
+                                        <button data-studentid='{{this._id}}' data-projectid='{{../this.project._id}}'
+                                        class='btn btn-danger wBtn mt-1' data-toggle='modal'
+                                        data-target='#kick-group-model'><i class="fa-solid fa-delete-left"></i></button>
+
+                                    </div>
+                                </div>
+                            {{/if}}
+                        {{/each}}
+                    {{else}}
+                        <div class="text-center">Chưa có sinh viên trong nhóm này!</div>
+                    {{/unless}}
+                {{else}}
+                    <div class="text-center">Chưa có nhóm nào.</div>
+                {{/each}}                    
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="successModal" class="modal fade">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box success">
+					<i class="fa-solid fa-check"></i>
+				</div>				
+				<h4 class="modal-title w-100">Thành công!</h4>	
+			</div>
+			<div class="modal-body">
+				<p class="text-center">Nhiệm vụ đã được tạo thành công.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-success btn-block" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>     
+
+<div id="dangerModal" class="modal fade">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box danger">
+					<i class="fa-solid fa-x"></i>
+				</div>				
+				<h4 class="modal-title w-100">Thất bại!</h4>	
+			</div>
+			<div class="modal-body">
+				<p class="text-center">Nhiệm vụ tạo thất bại.</p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-danger btn-block" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div> 
+
+<div class="modal fade" id="task-user-model" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTaskModalLabel">Add Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" class="form-control" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" id="description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <select id="scores" class="form-control">
+                        <option value="0,25">0,25 Điểm</option>
+                        <option value="0,5">0,5 Điểm</option>
+                        <option value="0,75">0,75 Điểm</option>
+                        <option value="1">1 Điểm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                            <select id="datacomplete" class="form-control">
+                                <option value="1">1 Ngày</option>
+                                <option value="7">1 Tuần</option>
+                                <option value="15">15 Ngày</option>
+                                <option value="30">1 Tháng</option>
+                                <option value="">Không hạn mức</option>
+                            </select>
+                </div>
+                <button id="btn-task-user" class="btn btn-primary">Add Task</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='kick-group-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Đưa sinh viên ra khỏi nhóm này</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Hành động này không thể khôi phục, Bạn có chắc muốn đưa sinh viên này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-kick-group' type='button' class='btn btn-primary'>Chấp Nhận</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var btnKickGroup = document.getElementById('btn-kick-group');
+        var btnTaskUser = document.getElementById('btn-task-user');
+        var studentId;
+        var projectId;
+        $('#kick-group-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            studentId = button.data('studentid');
+            projectId = button.data('projectid');
+
+        })
+        $('#task-user-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            studentId = button.data('studentid');
+        })
+        btnTaskUser.onclick = function () {
+            const title = $("#title").val();
+            const description = $("#description").val();
+            const datacomplete = $("#datacomplete").val();
+            const scores = $("#scores").val();
+            fetch("/gv/addtask", {
+                method: "POST",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ title, description,datacomplete,scores,studentId}),
+            }).then((response) => {
+                    if (response.status === 200) {
+                    $('#task-user-model').modal('hide');
+                    $("#title").val('')
+                    $("#description").val('')
+                    $('#successModal').modal('show');
+                    } else {
+                    $('#task-user-model').modal('hide');
+                    $("#title").val('')
+                    $("#description").val('')
+                    $('#dangerModal').modal('show');
+                    }
+                });
+        } 
+        btnKickGroup.onclick = function () {
+            var kickFormGroup = document.createElement('form');
+                kickFormGroup.method = "POST";
+                kickFormGroup.action = '/gv/' + studentId + '/' +projectId  + '/kickgroup?_method=PUT';
+                document.body.appendChild(kickFormGroup);
+                kickFormGroup.submit();
+        } 
+    })
+</script>

@@ -36,8 +36,26 @@ app.engine(
     handlebars.engine({
         extname: '.hbs',
         helpers: {
-            eq: (a,b)=> a==='Manager',
-            admin: (user) => user !== 'admin123',
+            x:a => a==1,
+            arranti1: members => {
+                var hasVerifyOne = members.some(function(member) {
+                    return member.isVerifiedbyInstructor === 1;
+                });
+                return !hasVerifyOne;
+            },
+            arranti2: members => {
+                var hasVerifyOne = members.some(function(member) {
+                    return member.isVerifiedbyInstructor === 2;
+                });
+                return !hasVerifyOne;
+            },
+            eq: (a,b)=> a==b,
+            eqarr: (a,b)=> {
+                if (Array.isArray(a) && Array.isArray(b)) {
+                    return a.length === b.length;
+                  }
+                  return false;
+            } ,
             sum: (a, b) => a + b,
             sub: (a, b) => a - b,
             sortable: (field, sort) => {
@@ -86,7 +104,53 @@ app.engine(
                     minimumIntegerDigits: 2,
                     useGrouping: false,
                 });
-                return `<h3>${date}/${month}/${year}-${hours}:${minutes}</h3>`;
+                return `${date}/${month}/${year}-${hours}:${minutes}`;
+            },
+            formatday: (time) => {
+                var dateTime = new Date(time);
+                // Lấy ngày
+                var date = dateTime.getDate().toLocaleString('en-US', {
+                    minimumIntegerDigits: 2,
+                    useGrouping: false,
+                });
+                // Lấy tháng (lưu ý: trong JavaScript, tháng được đếm từ 0 đến 11)
+                var month = (dateTime.getMonth() + 1).toLocaleString('en-US', {
+                    minimumIntegerDigits: 2,
+                    useGrouping: false,
+                });
+                // Lấy năm
+                var year = dateTime.getFullYear();
+                return `${date}/${month}/${year}`;
+            },
+            formatdaytimetask: (time) => {
+                var dateTime = new Date(time);
+                var currentDate = new Date();
+                var date = dateTime.getDate().toLocaleString('en-US', {
+                    minimumIntegerDigits: 2,
+                    useGrouping: false,
+                });
+                var month = (dateTime.getMonth() + 1).toLocaleString('en-US', {
+                    minimumIntegerDigits: 2,
+                    useGrouping: false,
+                });
+                var year = dateTime.getFullYear();
+            
+                var dateTimeYear = dateTime.getFullYear();
+                var dateTimeMonth = dateTime.getMonth();
+                var dateTimeDate = dateTime.getDate();
+            
+                var currentYear = currentDate.getFullYear();
+                var currentMonth = currentDate.getMonth();
+                var currentDate = currentDate.getDate();
+            
+                if (dateTimeYear > currentYear || dateTimeMonth > currentMonth || dateTimeDate > currentDate) {
+                    return `<p class='text-primary'>${date}/${month}/${year}</p>`;
+                } else if (dateTimeYear === currentYear && dateTimeMonth === currentMonth && dateTimeDate === currentDate) {
+                    return `<p class='text-warning'>${date}/${month}/${year}</p>`;
+                } else {
+                    return `<p class='text-danger'>${date}/${month}/${year}</p>`;
+
+                }
             }
         },
     }),

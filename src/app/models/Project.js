@@ -19,6 +19,10 @@ const projectSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User',
             required: true
+        },
+        userclass: {
+            type: Schema.Types.ObjectId,
+            ref: 'UserClass',   
         }
     },
     {

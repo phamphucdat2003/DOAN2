@@ -21,9 +21,23 @@ const userSchema = new Schema(
         },
         role: {
             type: String,
-            enum: ['admin', 'lecturer', 'student'],
+            enum: ['admin', 'lecturer', 'student','none'],
+            default: 'none',
             required: true,
-        }
+        },
+        isVerified: {
+            type: Boolean,
+            default: false,
+          },
+        isVerifiedbyInstructor: {
+            type: Number,
+            enum: [0, 1, 2],
+            default: 0,
+        },
+        proficiency: {
+            type: String,
+            default: '',
+          },
     },
     {
         timestamps: true,

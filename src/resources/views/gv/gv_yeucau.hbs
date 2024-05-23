@@ -1,0 +1,317 @@
+<style>
+       .container-fluid {
+            position: relative;
+        }
+        .custom-button {
+            width: 100%;
+            outline: 0;
+            border: none;
+            font-size: 13px;
+            height: 30px;
+            background-color: #9147ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: sticky;
+            color:white;
+            top: 0pt;
+            z-index: 2;
+        }
+        .custom-line {
+           width: 100%;
+            outline: 0;
+            border: none;
+            font-size: 15px;
+            height: 30px;
+            background-color: #A78BFA;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color:white;
+        }
+        .profile {
+            display: flex; /* Hiển thị các phần tử con theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
+            padding: 20px; /* Khoảng cách bên trong ô con */
+            background-color: #ffffff; /* Nền màu trắng */
+            border: 2px solid black; /* Viền màu */
+            border-radius: 10px; /* Bo tròn các góc */
+            width: 90%; /* Chiếm 4/5 chiều dài của ô ngoài */
+        }
+
+        .profile img {
+            width: 100px; /* Đặt kích thước hình ảnh */
+            height: 100px; /* Đặt chiều cao hình ảnh */
+            object-fit: cover; /* Tự động điều chỉnh kích thước hình ảnh */
+            border-radius: 50%; /* Bo tròn hình ảnh */
+            margin-right: 20px; /* Khoảng cách bên phải của hình ảnh */
+        }
+
+        .profile-details {
+            width: 60%;
+            text-align: left; /* Căn trái cho tên và email */
+        }
+
+        .profile-details h3,
+        .profile-details p {
+            margin: 0; /* Xóa khoảng cách giữa các phần tử */
+        }
+        .wBtn{
+            width: 100%;
+        }
+        .wBtn-100{
+            width: 20%;
+        }
+</style>
+
+<div class="container-fluid h-100">
+    <div class="row h-100 justify-content-center">
+        <div class="col-md-4">
+            <div class="custom-box">
+                <div class="custom-button">
+                    <h5>DUYỆT HOÀN THÀNH ĐỒ ÁN</h5>
+                </div>
+                {{#each groupcompletes}}
+                      <div class="profile mt-2 mr-2 ml-2 ">
+                        <div class="d-flex">
+                        <img src="{{this.group.imglink}}" alt="Hình ảnh từ Google Drive">
+                        <div class="profile-details">
+                            <h5>{{this.group.project.name}}</h5>
+                           <p class="card-text">Thành viên:
+                                <p class="card-text ml-4">
+                                    {{#each this.group.members}}
+                                        {{this.name}}
+                                        <br>
+                                    {{/each}}
+                                </p>
+                           </p>
+                            
+                        </div>
+                        </div>
+                        <div class="ml-auto wBtn-100">    
+                            <button data-id='{{this._id}}' class='btn btn-primary wBtn' data-toggle='modal' data-target='#accept-votecomplete-model'>Duyệt</button>
+                            <button data-id='{{this._id}}' class='btn btn-danger wBtn mt-1' data-toggle='modal' data-target='#refuse-votecomplete-model'>Từ chối</button>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="text-center">Chưa có nhóm nào hoàn thành</div>
+                {{/each}}                
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="custom-box">
+                <a href="nhom" class="custom-button">
+                    <i class="fa-solid fa-user-group"></i>
+                </a>
+                {{#each usergroups}}
+                    <div class="custom-line">{{this.project.name}}</div>
+                    {{#unless (arranti1 this.members)}}
+                        {{#each this.members}}
+                            {{#if (eq this.isVerifiedbyInstructor 1)}}
+                                <div class="profile mt-2 mr-2 ml-2 mb-2">
+                                    <div class="d-flex">
+                                        <img src="https://drive.google.com/thumbnail?id={{this.imgid}}" alt="Hình ảnh từ Google Drive">
+                                        <div class="profile-details">
+                                            <h5>{{this.name}}</h5>
+                                            <p class="card-text">Proficiency:<br>{{this.proficiency}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto wBtn-100">    
+                                        <button onClick="acceptGroup('{{this._id}}')" class='btn btn-primary wBtn'>Duyệt</button> 
+                                        <button data-studentid='{{this._id}}' data-projectid='{{../this.project._id}}' class='btn btn-danger wBtn mt-1' data-toggle='modal' data-target='#refuse-group-model'>Từ chối</button>
+                                    </div>
+                                </div>
+                            {{/if}}
+                        {{/each}}
+                    {{else}}
+                        <div class="text-center">Không có thêm sinh viên nào xin tham gia nhóm này!</div>
+                    {{/unless}}
+                {{else}}
+                    <div class="text-center">Chưa có nhóm nào.</div>
+                {{/each}}                 
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="custom-box">
+                <a href="sinhvien" class="custom-button">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                {{#each userinstructors}}
+                      <div class="profile mt-2 mr-2 ml-2 ">
+                        <div class="d-flex">
+                        <img src="https://drive.google.com/thumbnail?id={{this.imgid}}" alt="Hình ảnh từ Google Drive">
+                        <div class="profile-details">
+                            <h5>{{this.name}}</h5>
+                            <p class="card-text">Proficiency:<br>{{this.proficiency}}</p>
+                        </div>
+                        </div>
+                        <div class="ml-auto wBtn-100">    
+                            <button onClick="acceptInstructor('{{this._id}}')" class='btn btn-primary wBtn'>Duyệt</button> 
+                            <button data-id='{{this._id}}' class='btn btn-danger wBtn mt-1' data-toggle='modal' data-target='#refuse-instructor-model'>Từ chối</button>
+                        </div>
+                    </div>
+                {{else}}
+                    <div class="text-center">Chưa có tài khoản</div>
+                {{/each}}                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='accept-votecomplete-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Duyệt</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Xác nhận sinh viên đã hoàn thành đồ án này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-accept-votecomplete' type='button' class='btn btn-primary'>Xác nhận</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='refuse-votecomplete-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Từ chối</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Hành động này không thể khôi phục, Bạn có chắc muốn từ chối sinh viên này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-refuse-votecomplete' type='button' class='btn btn-primary'>Từ chối</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id='refuse-instructor-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Từ chối</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Hành động này không thể khôi phục, Bạn có chắc muốn từ chối sinh viên này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-refuse-instructor' type='button' class='btn btn-primary'>Từ chối</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id='refuse-group-model' class='modal' tabindex='-1' role='dialog'>
+    <div class='modal-dialog modal-dialog-centered' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Không chấp nhận sinh viên tham gia nhóm này</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Hành động này không thể khôi phục, Bạn có chắc muốn từ chối sinh viên này?</p>
+            </div>
+            <div class='modal-footer'>
+                <button id='btn-refuse-group' type='button' class='btn btn-primary'>Từ chối</button>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //
+    //{{!khi Trang chạy xong thì bắt đầu chạy func}}
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var btnRefuseInstructor = document.getElementById('btn-refuse-instructor');
+        var btnRefuseGroup = document.getElementById('btn-refuse-group');
+        var btnRefuseVotecomplete = document.getElementById('btn-refuse-votecomplete');
+        var btnAcceptVotecomplete = document.getElementById('btn-accept-votecomplete');
+        var studentId;
+        var projectId;
+        var Id;
+        $('#refuse-votecomplete-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            Id = button.data('id');
+        })
+        $('#accept-votecomplete-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            Id = button.data('id');
+        })
+        $('#refuse-instructor-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            studentId = button.data('id');
+        })
+        $('#refuse-group-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            studentId = button.data('studentid');
+            projectId = button.data('projectid');
+
+        })
+
+        btnRefuseVotecomplete.onclick = function () {
+            var refuseFormVotecomplete = document.createElement('form');
+                refuseFormVotecomplete.method = "POST";
+                refuseFormVotecomplete.action = '/gv/' + Id + '/refusevotecomplete?_method=DELETE';
+                document.body.appendChild(refuseFormVotecomplete);
+                refuseFormVotecomplete.submit();
+        }
+        btnAcceptVotecomplete.onclick = function () {
+            var acceptFormVotecomplete = document.createElement('form');
+                acceptFormVotecomplete.method = "POST";
+                acceptFormVotecomplete.action = '/gv/' + Id + '/acceptvotecomplete?_method=PUT';
+                document.body.appendChild(acceptFormVotecomplete);
+                acceptFormVotecomplete.submit();
+        }
+        btnRefuseInstructor.onclick = function () {
+            var refuseFormInstructor = document.createElement('form');
+                refuseFormInstructor.method = "POST";
+                refuseFormInstructor.action = '/gv/' + studentId + '/refuseinstructor?_method=PUT';
+                document.body.appendChild(refuseFormInstructor);
+                refuseFormInstructor.submit();
+        }
+        btnRefuseGroup.onclick = function () {
+            var refuseFormGroup = document.createElement('form');
+                refuseFormGroup.method = "POST";
+                refuseFormGroup.action = '/gv/' + studentId + '/' +projectId  + '/refusegroup?_method=PUT';
+                document.body.appendChild(refuseFormGroup);
+                refuseFormGroup.submit();
+        } 
+    })
+    function acceptInstructor(studentId){
+        var acceptInstructorform = document.createElement('form');
+        acceptInstructorform.method = 'POST';
+        acceptInstructorform.action = '/gv/' + studentId + '/acceptinstructor?_method=PUT';
+        document.body.appendChild(acceptInstructorform);
+        acceptInstructorform.submit();
+    }
+    function acceptGroup(studentId){
+        var acceptGroupform = document.createElement('form');
+        acceptGroupform.method = 'POST';
+        acceptGroupform.action = '/gv/' + studentId +'/acceptgroup?_method=PUT';
+        document.body.appendChild(acceptGroupform);
+        acceptGroupform.submit();
+    }
+</script>

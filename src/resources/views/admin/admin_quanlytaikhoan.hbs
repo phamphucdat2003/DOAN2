@@ -34,8 +34,8 @@
 </style>
 
 <div class="container-fluid h-100">
-  <div class="row h-100">
-    <div class="col-md-6 offset-md-3">
+  <div class="row h-100 justify-content-center">
+    <div class="col-md-6">
       <div class="custom-box">
         {{#each users}}
           <div class="profile mt-2 mr-2 ml-2">
@@ -89,7 +89,7 @@
     //
     //{{!khi Trang chạy xong thì bắt đầu chạy func}}
     document.addEventListener("DOMContentLoaded", function () {
-        var deleteform = document.forms['delete-user-form'];
+       
         var btnDeleteUser = document.getElementById('btn-delete-user');
         var fileId;
         var restoreBtn = $('.btn-restore');
@@ -99,7 +99,10 @@
         }) //
        // {{!onclick vào buttun click thì xóa}}
         btnDeleteUser.onclick = function () {
+            var deleteform = document.createElement('form');
+            deleteform.method = 'POST';
             deleteform.action = '/admin/' + fileId + '/forcedelete?_method=DELETE';
+            document.body.appendChild(deleteform);
             deleteform.submit();
         } 
     })
