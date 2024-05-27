@@ -7,6 +7,9 @@ const Instructor = require('../models/Instructor');
 const Task = require('../models/Task')
 const Messages = require('../models/Messages');
 const Votecomplete = require('../models/Votecomplete');
+const Scores = require('../models/Scores');
+const UserClass = require('../models/Userclass');
+
 //----------------------------------------------------------------
 class gvController {
     //[GET] /gv/doan
@@ -350,8 +353,8 @@ class gvController {
         const { studentId } = req.params;
         const instructor = await Instructor.findOne({ studentsId: { $in: [studentId] } })
         const group = await Group.findOne({ members: { $in: [studentId] } })
-        console.log("ins: ", instructor);
-        console.log("gr: ", group);
+        // console.log("ins: ", instructor);
+        // console.log("gr: ", group);
         if (group) {
             group.members.pull(studentId)
             group.save()
@@ -423,10 +426,13 @@ class gvController {
         const groupResults = await Promise.all(groupPromises);
         // console.log("groupResults: "+groupResults)
         const existingGroups = groupResults.filter(group => group !== null);
-        Promise.all([existingGroups])
-            .then(([groups]) => {
+        const groupsId = existingGroups.map(group => group._id);
+        const groupcompletes = Votecomplete.find({ group:{ $in: groupsId }});
+        Promise.all([existingGroups,groupcompletes])
+            .then(([groups,groupcomplete]) => {
                 res.render('gv/gv_nhom',{
                     groups: mutipleMongooseToObject(groups),
+                    groupcomplete: mutipleMongooseToObject(groupcomplete),
                     title:'Nhóm'
                 })
             })
@@ -483,6 +489,7 @@ class gvController {
     async addtask(req, res, next){
         const myId = req.session.userId;
         const {title, description,datacomplete,scores,studentId} = req.body;
+        // console.log(scores);
         function convertStringToDays(str) {
             const numericValue = parseInt(str); // Lấy giá trị số từ chuỗi
             if (!isNaN(numericValue)) { // Kiểm tra xem giá trị có hợp lệ hay không
@@ -492,7 +499,7 @@ class gvController {
             }
             return null; // Trả về null nếu giá trị không hợp lệ
         }
-        const task = new Task({title, description,owner:myId,datacomplete:convertStringToDays(datacomplete),assignedTo:studentId})
+        const task = new Task({title, description,owner:myId,datacomplete:convertStringToDays(datacomplete),assignedTo:studentId,scores})
         await task.save()
             .then(() => {
                 res.json({ message: "Thêm thành công" });
@@ -512,10 +519,62 @@ class gvController {
             })
     }
     async verifytask(req,res,next){
+        // const myId = req.session.userId;
         const taskId = req.params.taskId;
-        await Task.updateOne({_id:taskId},{$set:{bylecturer:1}})
-                    .then(()=>{
-                        res.redirect('back')
+        const studentTask = await Task.findById(taskId)
+        // console.log(studentTask)
+        const studentScores = await Scores.findOne({student:studentTask.assignedTo})
+        await Task.findOneAndUpdate({ _id: taskId },{ $set: { bylecturer: 1 } },{ new: true })
+                    .then((task) => {
+                        if (studentScores) {
+                            Scores.findById(studentScores._id)
+                                .then((currentScoresDoc) => {
+                                        // console.log(task.scores);
+                                        const updatedScores = currentScoresDoc.scores + task.scores;
+                                        Scores.updateOne({ _id: studentScores._id },{ $set: { scores: updatedScores } })
+                                                .then(() => {
+                                                    res.redirect('back')
+                                                })
+                                                .catch((error) => {
+                                                    console.error(error);
+                                                    res.render('error/404',{
+                                                        title:'LỖI HỆ THỐNG',
+                                                        home:true
+                                                    });
+                                                });
+                                })
+                                .catch((error) => {
+                                    console.error(error);
+                                    res.render('error/404',{
+                                        title:'LỖI HỆ THỐNG',
+                                        home:true
+                                    });
+                                });
+                        } else {
+                           UserClass.findOne({members:{ $in: studentTask.assignedTo }})
+                            .then((classuser) => {
+                                // console.log(classuser.name)
+                                const newScores = new Scores({student:studentTask.assignedTo,scores:task.scores,userclass:classuser.name})
+                                newScores.save()
+                                        .then(() => {
+                                            res.redirect('back')
+                                        })
+                                        .catch((error) => {
+                                            console.error(error);
+                                            res.render('error/404',{
+                                                title:'LỖI HỆ THỐNG',
+                                                home:true
+                                            });
+                                        });
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                res.render('error/404',{
+                                    title:'LỖI HỆ THỐNG',
+                                    home:true
+                                });
+                            });
+                        }
                     })
                     .catch((error) => {
                         console.error(error);
@@ -550,6 +609,46 @@ class gvController {
                 })
             })
     }
+    async viewdiem(req, res, next){
+        const myId = req.session.userId;
+        const instructor = await Instructor.findOne({ instructorId: myId });
+        if (instructor) {
+            const studentIds = instructor.studentsId;
+            await Scores.find({student:{ $in: studentIds }}).populate('student')
+                    .then((scores) => {
+                        res.render('gv/gv_diem',{
+                            scores: mutipleMongooseToObject(scores),
+                            title:'Điểm'
+                        })
+                    })
+        } else {
+            res.render('gv/gv_diem',{
+                title:'Điểm'
+            })
+        }
+    }
+    async diem(req, res, next) {
+        const groupId = req.params.groupId;
+        const scores = req.params.scores;
+        const group = await Group.findOne({_id: groupId})
+        group.members.map(async (member) => {
+            // console.log(member)
+            const existingscores = await Scores.find({student: member})
+            console.log(existingscores)
+            if (existingscores) {
+                await Scores.updateOne({student: member},{$set:{scoresbylec:scores,completed:true}})
+                            .then(()=>console.log("thanhcong"))
+                            .catch(err => console.log("err: ",err))
+            } else {
+                await UserClass.findOne({members:{ $in: member}})
+                        .then((userClass) => {
+                            const newScores = new Scores({student:member,scoresbylec:scores,completed:true,userclass:userClass._id})
+                            newScores.save()
+                        })
+            }
+        })
+        res.redirect("back")
 
+    }
 }
 module.exports = new gvController();

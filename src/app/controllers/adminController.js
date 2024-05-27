@@ -25,7 +25,7 @@ class adminController {
     };
     verified (req, res, next) {
         const { userId,role } = req.params;
-        User.updateOne({ _id: userId }, { $set: { role, isVerified:true} })
+        User.updateOne({ _id: userId }, { $set: { role:role, isVerified:true} })
             .then(() => res.redirect('/admin/duyet'))
             .catch((error) => {
                 console.error(error);
@@ -40,7 +40,6 @@ class adminController {
     viewqltk(req, res,next) {
         User.find({isVerified:true})
             .then((usersHaveAdmin) => {
-                
                 const users = usersHaveAdmin.filter(user => user.role !== 'admin');
                 res.render('admin/admin_quanlytaikhoan', {
                     users: mutipleMongooseToObject(users),
@@ -91,7 +90,6 @@ class adminController {
                 });
               });
     }
-    //[put] /admin/:userId/:role/verified
     async update(req, res, next) {
         const { id } = req.params;
         const { name, email, password, passwordfake,imgid,role } = req.body;
@@ -119,20 +117,20 @@ class adminController {
               });
         }
 
-    async addclass (req, res,next) {
-        const classUser = new UserClass(req.body);
-            classUser
-                .save()
-                .then(() => {
-                    console.log('thêm thành công')
-                })
-                .catch((error) => {
-                    console.error(error);
-                    res.render('error/404',{
-                        title:'LỖI HỆ THỐNG',
-                        home:true
-                    });
-                  });
-    }
+    // async addclass (req, res,next) {
+    //     const classUser = new UserClass(req.body);
+    //         classUser
+    //             .save()
+    //             .then(() => {
+    //                 console.log('thêm thành công')
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error);
+    //                 res.render('error/404',{
+    //                     title:'LỖI HỆ THỐNG',
+    //                     home:true
+    //                 });
+    //               });
+    // }
 }
 module.exports = new adminController();

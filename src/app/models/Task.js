@@ -12,7 +12,7 @@ const taskSchema = new Schema(
             type: String,
             required: true,
         },
-        Scores:{
+        scores:{
             type: Number,
             required: true,
         },

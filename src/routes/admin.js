@@ -6,10 +6,9 @@ const adminController = require('../app/controllers/adminController');
 router.get('/:id/edit-user', adminController.edituser);
 router.delete('/:id/forcedelete',adminController.forcedelete);
 
-router.post('/addclass',adminController.addclass);
+// router.post('/addclass',adminController.addclass);
 
 
-router.put('/:id',adminController.update);
 router.put('/:id',adminController.update);
 
 

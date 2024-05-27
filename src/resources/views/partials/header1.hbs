@@ -12,7 +12,10 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
               <span class="text-white">{{session.name}}</span>
+                    {{#unless session.admin}}
+
               <img class="rounded-circle border border-white" src="https://drive.google.com/thumbnail?id={{session.imgid}}" alt="ảnh {{tsession.name}}">
+            {{/unless}}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/auth/modify">Profile</a>

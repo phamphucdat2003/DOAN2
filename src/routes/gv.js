@@ -3,6 +3,8 @@ const express = require('express');
 const router = express.Router();
 const gvController = require('../app/controllers/gvController');
 
+router.get('/diem',gvController.viewdiem);
+router.post('/:groupId/:scores/diem',gvController.diem);
 
 
 router.get('/nhiemvu',gvController.viewnhiemvu);

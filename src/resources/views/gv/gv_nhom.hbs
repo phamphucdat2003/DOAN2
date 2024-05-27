@@ -119,6 +119,15 @@
             <div class="custom-box">
                 {{#each groups}}
                     <div class="custom-line">{{this.project.name}}</div>
+                    {{#each ../groupcomplete}}
+                        {{#if (and2 (eq ../this._id this.group) this.iscompletebylec)}}
+                            <div class="mt-2">
+                            Các sinh viên đã hoàn thành đồ án: 
+                            <button data-groupid='{{../this._id}}' class='btn btn-success ml-2' data-toggle='modal' data-target='#scores-group-model'>Chấm Điểm</button>
+                            </div>
+                        {{/if}}
+                    {{/each}}
+
                     {{#unless (arranti2 this.members)}}
                         {{#each this.members}}
                             {{#if (eq this.isVerifiedbyInstructor 2)}}
@@ -136,7 +145,7 @@
                                         class='btn btn-primary wBtn' data-toggle='modal'
                                         data-target='#task-user-model'><i class="fa-regular fa-clipboard"></i></button>
 
-                                        <button class='btn btn-primary wBtn mt-1'><i class="fa-regular fa-comment"></i></button>
+                                        <a href="/message/nhantin/{{this._id}}" class='btn btn-primary wBtn mt-1'><i class="fa-regular fa-comment"></i></a>
                                         
                                         <button data-studentid='{{this._id}}' data-projectid='{{../this.project._id}}'
                                         class='btn btn-danger wBtn mt-1' data-toggle='modal'
@@ -153,6 +162,39 @@
                     <div class="text-center">Chưa có nhóm nào.</div>
                 {{/each}}                    
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="scores-group-model" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Chấm điểm</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Hành động này không thể hoàn tác,hãy suy nghĩ thật kỹ trước khi xác nhận.</p>
+                    <div class="form-group">
+                        <label for="scores">Chọn Điểm:</label>
+                        <select id="scores" class="form-control">
+                            <option value="7">7 Điểm</option>
+                            <option value="6">6 Điểm</option>
+                            <option value="5">5 Điểm</option>
+                            <option value="4">4 Điểm</option>
+                            <option value="3">3 Điểm</option>
+                            <option value="2">2 Điểm</option>
+                            <option value="1">1 Điểm</option>
+                            <option value="0">0 Điểm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button id="btn-scores" class="btn btn-primary">Chấm Điểm</button>
+                </div>
         </div>
     </div>
 </div>
@@ -214,10 +256,10 @@
                     <textarea class="form-control" id="description" rows="3" required></textarea>
                 </div>
                 <div class="form-group">
-                    <select id="scores" class="form-control">
-                        <option value="0,25">0,25 Điểm</option>
-                        <option value="0,5">0,5 Điểm</option>
-                        <option value="0,75">0,75 Điểm</option>
+                    <select id="scoresplus" class="form-control">
+                        <option value="0.25">0,25 Điểm</option>
+                        <option value="0.5">0,5 Điểm</option>
+                        <option value="0.75">0,75 Điểm</option>
                         <option value="1">1 Điểm</option>
                     </select>
                 </div>
@@ -261,12 +303,19 @@
     document.addEventListener("DOMContentLoaded", function () {
         var btnKickGroup = document.getElementById('btn-kick-group');
         var btnTaskUser = document.getElementById('btn-task-user');
+        var btnScores = document.getElementById('btn-scores');
         var studentId;
         var projectId;
+        var groupId;
         $('#kick-group-model').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             studentId = button.data('studentid');
             projectId = button.data('projectid');
+
+        })
+        $('#scores-group-model').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            groupId = button.data('groupid');
 
         })
         $('#task-user-model').on('show.bs.modal', function (event) {
@@ -277,7 +326,8 @@
             const title = $("#title").val();
             const description = $("#description").val();
             const datacomplete = $("#datacomplete").val();
-            const scores = $("#scores").val();
+            const scores = $("#scoresplus").val();
+
             fetch("/gv/addtask", {
                 method: "POST",
                 headers: {
@@ -304,6 +354,14 @@
                 kickFormGroup.action = '/gv/' + studentId + '/' +projectId  + '/kickgroup?_method=PUT';
                 document.body.appendChild(kickFormGroup);
                 kickFormGroup.submit();
-        } 
+        }
+        btnScores.onclick = function () {
+            const scores = $("#scores").val();
+            var scoresFormGroup = document.createElement('form');
+                scoresFormGroup.method = "POST";
+                scoresFormGroup.action = '/gv/' + groupId +"/" + scores + '/diem';
+                document.body.appendChild(scoresFormGroup);
+                scoresFormGroup.submit();
+        }  
     })
 </script>

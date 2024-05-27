@@ -85,10 +85,12 @@
                             {{/if}}
                         </div>
                     {{/if}}
+                    {{#unless session.admin}}
                     <div class="form-group">
                         <label for="proficiency">Proficiency:</label>
                         <textarea class="form-control" id="proficiency" name="proficiency" placeholder="Enter proficiency" rows="3" required>{{user.proficiency}}</textarea>
                     </div>
+                    {{/unless}}
                     <input type="text" class="d-none"value="{{user.imgid}}" name="imgid">
                      <div class="form-group">
                         <div class="custom-file">
@@ -102,7 +104,9 @@
         </div>
         <div class="col-md-6 mt-5">
             <div class="image-container">
+            {{#unless session.admin}}
                 <img id="imgId" src="https://drive.google.com/thumbnail?id={{user.imgid}}" alt="ảnh {{user.name}}">
+                {{/unless}}
             </div>
         </div>
     </div>

@@ -3,15 +3,25 @@ const Schema = mongoose.Schema;
 
 const scoresSchema = new Schema(
     {
-        group: {
-            type: Schema.Types.ObjectId,
-            ref: 'Group',
-            required: true,       
-        },
-        members: {
+        student: {
             type: Schema.Types.ObjectId,
             ref: 'User',
             required: true,   
+        },
+        scores:{
+            type: Number,
+            default: 0,
+        },
+        scoresbylec:{
+            type: Number,
+            default: 0,
+        },
+        completed: {
+            type:Boolean,
+            default: false,
+        },
+        userclass: {
+            type: String, 
         }
     },
     {

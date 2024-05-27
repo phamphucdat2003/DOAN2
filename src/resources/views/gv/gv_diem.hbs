@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover mt-4">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center">
+                        Lớp
+                    {{!-- {{{sortable 'userclass' _sort}}} --}}
+                    </th>
+                    <th class="text-center">Họ và Tên</th>
+                    <th class="text-center">Điểm nhiệm vụ</th>
+                    <th class="text-center">Điểm đồ án</th>
+                    <th class="text-center">Điểm tổng</th>
+                    <th class="text-center">Hoàn thành</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each scores}}
+                        <tr>
+                            <td class="text-center">{{this.userclass}}</td>
+                            <td>{{this.student.name}}</td>
+                            <td class="text-center">{{this.scores}}</td>
+                            <td class="text-center">{{this.scoresbylec}}</td>
+                            <td class="text-center">{{sum this.scores this.scoresbylec}}</td>
+                            <td class="text-center">{{#if this.completed}}Hoàn thành{{else}}Chưa hoàn thành{{/if}}</td>
+                        </tr>
+                {{else}}
+                <tr>
+                    <td colspan='7' class='text-center'>Chưa có sinh viên nào có điểm</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

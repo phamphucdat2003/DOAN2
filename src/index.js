@@ -36,6 +36,10 @@ app.engine(
     handlebars.engine({
         extname: '.hbs',
         helpers: {
+            and2: (a,b) => {
+                if (a && b) return true
+                return false
+            },
             x:a => a==1,
             arranti1: members => {
                 var hasVerifyOne = members.some(function(member) {
@@ -49,7 +53,16 @@ app.engine(
                 });
                 return !hasVerifyOne;
             },
-            eq: (a,b)=> a==b,
+            eq: (a,b)=> {
+                // Convert ObjectIds to strings if necessary
+                if (a && typeof a.toString === 'function') {
+                    a = a.toString();
+                }
+                if (b && typeof b.toString === 'function') {
+                    b = b.toString();
+                }
+                return a === b;
+            },
             eqarr: (a,b)=> {
                 if (Array.isArray(a) && Array.isArray(b)) {
                     return a.length === b.length;
